@@ -49,3 +49,53 @@ int Enemy::takeDamage(int attack)
 	}
 	return 0;
 }
+
+char Enemy::getMove(int playerX, int playerY)
+{
+	static default_random_engine randEngine(time(NULL));
+	uniform_int_distribution<int> moveRoll(0, 6);
+
+	int distance;
+	int dx = px - playerX;
+	int dy = py - playerY;
+	int adx = abs(dx);
+	int ady = abs(dy);
+
+	distance = adx + ady;
+
+	if (distance <= 5) {                                // Need to implement range variable
+		// Moving along x axis
+		if (adx > ady){
+			if (dx > 0){
+				return 'a';
+			}else{
+				return 'd';
+			}
+
+		}
+		// Moving along y axis
+		else {
+			if (dy > 0){
+				return 'w';
+			}
+			else{
+				return 's';
+			}
+		}
+
+	}
+
+	int randomMove = moveRoll(randEngine);
+	switch (randomMove) {
+	case 0:
+		return 'a';
+	case 1:
+		return 'w';
+	case 2:
+		return 's';
+	case 3:
+		return 'd';
+	default:
+		return '.';
+	}
+}

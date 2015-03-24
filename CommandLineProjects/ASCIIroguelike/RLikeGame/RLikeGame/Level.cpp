@@ -39,19 +39,19 @@ void Level::load(string fileName, Player &player)
 				player.setPosition(j, i);
 				break;
 			case 'S': // Snake
-				pEnemies.push_back(Enemy("Snake", tile, 1, 3, 1, 10, 10));
+				pEnemies.push_back(Enemy("Snake", tile, 1, 3, 1, 10, 50));
 				pEnemies.back().setPosition(j, i);
 				break;
 			case 'g':
-				pEnemies.push_back(Enemy("Goblin", tile, 2, 10, 5, 35, 50));
+				pEnemies.push_back(Enemy("Goblin", tile, 2, 10, 5, 35, 150));
 				pEnemies.back().setPosition(j, i);
 				break;
 			case 'O':
-				pEnemies.push_back(Enemy("Ogre", tile, 4, 20, 20, 200, 500));
+				pEnemies.push_back(Enemy("Ogre", tile, 4, 20, 40, 200, 500));
 				pEnemies.back().setPosition(j, i);
 				break;
 			case 'B':
-				pEnemies.push_back(Enemy("Bandit", tile, 3, 15, 10, 100, 250));
+				pEnemies.push_back(Enemy("Bandit", tile, 3, 15, 10, 100, 300));
 				pEnemies.back().setPosition(j, i);
 				break;
 			case 'D':
@@ -103,6 +103,43 @@ void Level::movePlayer(char input, Player &player)
 	}
 }
 
+void Level::updateEnemies(Player &player)
+{
+	char aiMove;
+	int playerX;
+	int playerY;
+	int enemyX;
+	int enemyY;
+
+	player.getPosition(playerX, playerY);
+
+	for (int i = 0; i < pEnemies.size(); i++){
+		aiMove = pEnemies[i].getMove(playerX, playerY);
+		pEnemies[i].getPosition(enemyX, enemyY);
+
+		switch (aiMove)
+		{
+			// Up
+		case 'w':
+			processEnemyMove(player, i, enemyX, enemyY - 1);
+			break;
+			// Down
+		case 's':
+			processEnemyMove(player, i, enemyX, enemyY + 1);
+			break;
+			// Left
+		case 'a':
+			processEnemyMove(player, i, enemyX - 1, enemyY);
+			break;
+			// Right
+		case 'd':
+			processEnemyMove(player, i, enemyX + 1, enemyY);
+			break;
+		}
+	}
+
+}
+
 char Level::getTile(int x, int y)
 {
 	return  pLevelData[y][x];
@@ -136,6 +173,32 @@ void Level::processPlayerMove(Player &player, int targetX, int targetY)
 	}
 }
 
+void Level::processEnemyMove(Player &player, int enemyIndex, int targetX, int targetY)
+{
+	int playerX;
+	int playerY;
+	int enemyX;
+	int enemyY; 
+
+	pEnemies[enemyIndex].getPosition(enemyX, enemyY);
+	player.getPosition(playerX, playerY);
+	char moveTile = getTile(targetX, targetY);
+
+	switch (moveTile)
+	{
+	case '.':
+		pEnemies[enemyIndex].setPosition(targetX, targetY);
+		setTile(enemyX, enemyY, '.');
+		setTile(targetX, targetY, pEnemies[enemyIndex].getTile());
+		break;
+	case '@':
+		battleMonster(player, enemyX, enemyY);
+		break;
+	default:
+		break;
+	}
+}
+
 void Level::battleMonster(Player &player, int targetX, int targetY)
 {
 	int enemyX;
@@ -155,26 +218,32 @@ void Level::battleMonster(Player &player, int targetX, int targetY)
 
 			// Battle!
 			attackRoll = player.attack();
-			printf("Player attacks %s with a roll of %d",enemyName.c_str(), attackRoll);
+			printf("Player attacks %s with a roll of %d\n",enemyName.c_str(), attackRoll);
 			system("PAUSE");
 			attackResult = pEnemies[i].takeDamage(attackRoll);
 			if (attackResult != 0) {
 				setTile(targetX, targetY, 'X');
 				print();
-				printf("%s has been vanquished!",enemyName.c_str());
+				printf("%s has been vanquished!\n",enemyName.c_str());
+
+				// Remove the enemy
+				pEnemies[i] = pEnemies.back(); 
+				pEnemies.pop_back();
+				i--;
+
 				system("PAUSE");
 				player.addExperience(attackResult);
 				return;
 			}
 			// Monster turn
 			attackRoll = pEnemies[i].eAttack();
-			printf("%s attacks Player with a roll of %d",enemyName.c_str(), attackRoll);
+			printf("%s attacks Player with a roll of %d\n",enemyName.c_str(), attackRoll);
 			system("PAUSE");
 			attackResult = player.takeDamage(attackRoll);
 			if (attackResult != 0) {
 				setTile(playerX, playerY, '8');
 				print();
-				printf("You have been vanquished!");
+				printf("You have been vanquished!\n");
 				system("PAUSE");
 
 				exit(0);

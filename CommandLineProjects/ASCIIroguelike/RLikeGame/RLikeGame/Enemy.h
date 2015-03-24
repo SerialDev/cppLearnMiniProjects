@@ -14,9 +14,13 @@ public:
 	// Getters 
 	void getPosition(int &x, int &y);
 	string getName() { return p_eName; }
+	char getTile() { return p_eTile; }
 
 	int eAttack();
 	int takeDamage(int attack);
+
+	// Gets AI move command
+	char getMove(int playerX, int playerY);
 
 private:
 	// Properties

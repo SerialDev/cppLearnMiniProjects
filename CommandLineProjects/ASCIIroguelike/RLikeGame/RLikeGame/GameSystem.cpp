@@ -20,6 +20,7 @@ void GameSystem::playGame()
 	while (isDone == false) {
 		plevel.print();
 		playerMove();
+		plevel.updateEnemies(pPlayer);
 
 	}
 } 
