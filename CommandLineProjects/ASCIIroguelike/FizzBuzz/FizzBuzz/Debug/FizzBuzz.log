@@ -1,11 +1,20 @@
-﻿Build started 13/03/2015 20:21:55.
+﻿Build started 05/04/2015 15:32:17.
      1>Project "C:\Users\pato\Desktop\cppLearnMiniProjects\CommandLineProjects\ASCIIroguelike\FizzBuzz\FizzBuzz\FizzBuzz.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
          Source.cpp
-     1>c:\users\pato\desktop\cpplearnminiprojects\commandlineprojects\asciiroguelike\fizzbuzz\fizzbuzz\source.cpp(38): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>c:\users\pato\desktop\cpplearnminiprojects\commandlineprojects\asciiroguelike\fizzbuzz\fizzbuzz\source.cpp(97): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(283) : see declaration of 'scanf'
+     1>c:\users\pato\desktop\cpplearnminiprojects\commandlineprojects\asciiroguelike\fizzbuzz\fizzbuzz\source.cpp(150): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>c:\users\pato\desktop\cpplearnminiprojects\commandlineprojects\asciiroguelike\fizzbuzz\fizzbuzz\source.cpp(150): error C2365: 'system' : redefinition; previous definition was 'function'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdlib.h(560) : see declaration of 'system'
+     1>c:\users\pato\desktop\cpplearnminiprojects\commandlineprojects\asciiroguelike\fizzbuzz\fizzbuzz\source.cpp(150): error C2440: 'initializing' : cannot convert from 'const char [6]' to 'int'
+                 There is no context in which this conversion is possible
+     1>c:\users\pato\desktop\cpplearnminiprojects\commandlineprojects\asciiroguelike\fizzbuzz\fizzbuzz\source.cpp(151): error C2059: syntax error : 'return'
+     1>c:\users\pato\desktop\cpplearnminiprojects\commandlineprojects\asciiroguelike\fizzbuzz\fizzbuzz\source.cpp(152): error C2059: syntax error : '}'
+     1>c:\users\pato\desktop\cpplearnminiprojects\commandlineprojects\asciiroguelike\fizzbuzz\fizzbuzz\source.cpp(152): error C2143: syntax error : missing ';' before '}'
      1>Done Building Project "C:\Users\pato\Desktop\cppLearnMiniProjects\CommandLineProjects\ASCIIroguelike\FizzBuzz\FizzBuzz\FizzBuzz.vcxproj" (Build target(s)) -- FAILED.
 
 Build FAILED.
 
-Time Elapsed 00:00:00.39
+Time Elapsed 00:00:00.27
