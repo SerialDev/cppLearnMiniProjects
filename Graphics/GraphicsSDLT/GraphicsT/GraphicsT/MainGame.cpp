@@ -9,12 +9,15 @@
 
 
 // Constructor, just initializes private member variables
-MainGame::MainGame()
+MainGame::MainGame() : 
+	_screenWitdh(1024),
+	_screenHeight(768),
+	_time(0.0f),
+	_window(nullptr),
+	_gameState(GameState::PLAY)
 {
-	_window = nullptr;
-	_screenWitdh = 1024;
-	_screenHeight = 768;
-	_gameState = GameState::PLAY;
+
+
 }
 
 // Destructor
@@ -29,7 +32,7 @@ void MainGame::run()
 	initSystems();
 
 	// Initialize the sprite (temp)
-	_sprite.init(-1.0f, -1.0f, 1.0f, 1.0f);
+	_sprite.init(-1.0f, -1.0f, 2.0f, 2.0f);
 
 	// This only returns when the game ends
 	gameLoop();
@@ -72,6 +75,7 @@ void MainGame::initShaders()
 {
 	_colorProgram.compileShaders("Shaders/colorshading.vert", "Shaders/colorshading.frag");
 	_colorProgram.addAttribute("vertexPosition");
+	_colorProgram.addAttribute("vertexColor");
 	_colorProgram.linkShaders();
 }
 
@@ -81,6 +85,7 @@ void MainGame::gameLoop()
 	// Will loop until GameState is set to EXIT
 	while (_gameState != GameState::EXIT){
 		processInput();
+		_time += 0.01;
 		drawGame();
 	}
 }
@@ -107,12 +112,17 @@ void MainGame::processInput()
 // Draws the game using OpenGL
 void MainGame::drawGame()
 {
+
+
 	// Set base depth to 1.0
 	glClearDepth(1.0);
 	// Clear colour and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	_colorProgram.use();
+
+	GLuint timeLocation = _colorProgram.getUniformLocation("time");
+	glUniform1f(timeLocation, _time);
 
 	// Draw the sprite
 	_sprite.draw();

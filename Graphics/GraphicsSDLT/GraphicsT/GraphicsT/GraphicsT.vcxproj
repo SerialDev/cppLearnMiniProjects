@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="Errors.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
+    <ClCompile Include="IOManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -20,8 +21,10 @@
   <ItemGroup>
     <ClInclude Include="Errors.h" />
     <ClInclude Include="GLSLProgram.h" />
+    <ClInclude Include="IOManager.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FE2C8B6A-8D97-4382-852E-5620FD209ECE}</ProjectGuid>

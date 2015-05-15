@@ -1,5 +1,6 @@
 #include "Sprite.h"
-
+#include "Vertex.h"
+#include <cstddef>
 
 Sprite::Sprite()
 {
@@ -32,28 +33,44 @@ void Sprite::init(float x, float y, float width, float height)
 
 	/* This array will hold vertex data
 	6 vertices, each vertex has 2 floats for X and Y */
-	float vertexData[12];
+	Vertex vertexData[6];
 
 	// First triangle
-	vertexData[0] = x + width;
-	vertexData[1] = y + height; 
+	vertexData[0].position.x = x + width;
+	vertexData[0].position.y = y + height; 
 
-	vertexData[2] = x;
-	vertexData[3] = y + height; 
+	vertexData[1].position.x = x;
+	vertexData[1].position.y = y + height;
 
-	vertexData[4] = x;
-	vertexData[5] = y;
+	vertexData[2].position.x = x;
+	vertexData[2].position.y = y;
 
 	// Second triangle
-	vertexData[6] = x;
-	vertexData[7] = y;
+	vertexData[3].position.x = x;
+	vertexData[3].position.y = y;
 
-	vertexData[8] = x + width;
-	vertexData[9] = y;
+	vertexData[4].position.x = x + width;
+	vertexData[4].position.y = y;
 
-	vertexData[10] = x + width;
-	vertexData[11] = y + height;
+	vertexData[5].position.x = x + width;
+	vertexData[5].position.y = y + height;
 
+	for (int i = 0; i < 6; i++){
+		vertexData[i].color.r = 255;
+		vertexData[i].color.g = 0;
+		vertexData[i].color.b = 255;
+		vertexData[i].color.a = 255;
+	}
+
+	vertexData[1].color.r = 0;
+	vertexData[1].color.g = 0;
+	vertexData[1].color.b = 255;
+	vertexData[1].color.a = 255;
+
+	vertexData[4].color.r = 0;
+	vertexData[4].color.g = 255;
+	vertexData[4].color.b = 0;
+	vertexData[4].color.a = 255;
 	// Tell OpenGL to bind our vertex buffer object 
 	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
 	// Upload the data to the GPU
@@ -74,8 +91,11 @@ void Sprite::draw()
 	// Tell OpenGL to use first attribute array, right now only position is used
 	glEnableVertexAttribArray(0);
 
-	// Point OpenGL to the data in our VBO.
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	// This is the position attribute pointer
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+
+	// This is the colour attribute pointer
+	glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, color));
 
 	// Draw 6 vertices to the screen
 	glDrawArrays(GL_TRIANGLES, 0, 6);
