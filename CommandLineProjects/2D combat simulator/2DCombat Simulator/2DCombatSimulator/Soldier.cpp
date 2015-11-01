@@ -1,108 +1,108 @@
 #include "Soldier.h"
+
 #include <random>
 #include <ctime>
 
-using namespace std;
 
-Soldier::Soldier(string name, char tile, int level, int attack, int defense, int health, int army)
-{
-	p_eName = name;
-	p_eTile = tile; 
-	p_eLevel = level;
-	p_eAttack = attack;
-	p_eDefense = defense;
-	p_eHealth = health;
-	p_army = army;
+//Constructor initializes he soldier
+Soldier::Soldier(string name, char tile, int level, int attack, int defense, int health, int army) {
+	_name = name;
+	_tile = tile;
+	_level = level;
+	_attack = attack;
+	_defense = defense;
+	_health = health;
+	_army = army;
 }
 
-// Sets the position of the soldier
-void Soldier::setPosition(int x, int y)
-{
-	px = x;
-	py = y;
+//Sets the position of the soldier
+void Soldier::setPosition(int x, int y) {
+	_x = x;
+	_y = y;
 }
 
-// Gets the position of the soldier using reference variable
-void Soldier::getPosition(int &x, int &y)
-{
-	x = px;
-	y = py;
+//Gets the position of the soldier using reference variables
+void Soldier::getPosition(int &x, int &y) {
+	x = _x;
+	y = _y;
 }
 
-int Soldier::eAttack()
-{
+//Gets a random attack roll from 0 to _attack
+int Soldier::attack() {
+	//We use a static random engine so it only initializes once
 	static default_random_engine randomEngine(time(NULL));
-	uniform_int_distribution<int> attackRoll(0, p_eAttack);
+	uniform_int_distribution<int> attackRoll(0, _attack);
+	// Return the random roll
 	return attackRoll(randomEngine);
 }
 
-int Soldier::takeDamage(int attack)
-{
-	// check if the attack does damage
-	attack -= p_eDefense;
+//Makes the soldier take damage according to its defense. Returns 0 if he didnt die, and _experienceValue if he did
+int Soldier::takeDamage(int attack) {
+	attack -= _defense;
+	//check if the attack does damage
 	if (attack > 0) {
-		p_eHealth -= attack;
-		// check if he died
-		if (p_eHealth <= 0){
+		_health -= attack;
+		//check if he died
+		if (_health <= 0) {
 			return 1;
 		}
+
 	}
 	return 0;
 }
 
+//This does the soldier AI
+char Soldier::getMove(vector <Soldier *> armies[], int numArmies) {
 
-// This performs the soldier's AI
-char Soldier::getMove(vector <Soldier *> armies[], int numArmies)
-{
-	static default_random_engine randEngine(time(NULL));
-	uniform_int_distribution<int> moveRoll(0, 6);
-	
-	Soldier * closestSoldier = getClosestEnemy(armies, numArmies);
+	Soldier *closestSoldier = getClosestEnemy(armies, numArmies);
 
 	if (closestSoldier == nullptr) {
 		return '.';
 	}
+
 	int soldierX, soldierY;
+
 	closestSoldier->getPosition(soldierX, soldierY);
 
-	int dx = px - soldierX;
-	int dy = py - soldierY;
+	int dx = _x - soldierX;
+	int dy = _y - soldierY;
 	int adx = abs(dx);
 	int ady = abs(dy);
 
-
-	if (adx > ady){
-		if (dx > 0){
+	//Moving along X axis
+	if (adx > ady) {
+		//if player is left, move left. Otherwise move right
+		if (dx > 0) {
 			return 'a';
-		}else{
+		}
+		else {
 			return 'd';
 		}
-
 	}
-	// Moving along y axis
-	else {
-		if (dy > 0){
+	else { //Move along Y axis
+		if (dy > 0) {
 			return 'w';
 		}
-		else{
+		else {
 			return 's';
 		}
 	}
 }
 
-Soldier *Soldier::getClosestEnemy(vector<Soldier *> armies[], int numArmies)
-{
+//Returns a pointer to the closest enemy soldier, or nullptr if there is none!
+Soldier *Soldier::getClosestEnemy(vector <Soldier *> armies[], int numArmies) {
 	Soldier *closestSoldier = nullptr;
 	int closestDistance = INT_MAX;
-	int enemyx, enemyy;
+	int enemyX, enemyY;
 	int distance;
-
 	for (int i = 0; i < numArmies; i++) {
-		if (i != p_army) {
-			for (int j = 0; j < armies[i].size; j++){
-				armies[i][j]->getPosition(enemyx, enemyy);
-				distance = abs(enemyx - px) + abs(enemyy - py);
-				if (distance < closestDistance){
+		if (i != _army) {
+			for (int j = 0; j < armies[i].size(); j++) {
+				armies[i][j]->getPosition(enemyX, enemyY);
+
+				distance = abs(enemyX - _x) + abs(enemyY - _y);
+
+				if (distance < closestDistance) {
 					closestSoldier = armies[i][j];
 					closestDistance = distance;
 				}

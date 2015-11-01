@@ -11,9 +11,8 @@ public:
 
 	void playGame();
 
-
 private:
-	Level plevel;
-
+	Level _level;
 };
+
 
